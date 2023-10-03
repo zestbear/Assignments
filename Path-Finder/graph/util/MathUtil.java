@@ -1,0 +1,62 @@
+package util;
+
+public class MathUtil {
+
+	private MathUtil() {}
+
+	public static double direction(double x1, double y1, double x2, double y2) {
+		double xdiff = x2 - x1;
+		double ydiff = y2 - y1;
+		return Math.atan2(ydiff, xdiff);
+	}
+
+	public static double distance(double x1, double y1, double x2, double y2) {
+		double xdiff = x2 - x1;
+		double ydiff = y2 - y1;
+		return Math.sqrt(xdiff*xdiff + ydiff*ydiff);
+	}
+
+	public static boolean isIntersected(double x1, double y1, 
+										double x2, double y2,
+										double x3, double y3, 
+										double x4, double y4) 
+	{
+		return findIntersection(x1, y1, x2, y2, x3, y3, x4, y4) != null;
+	}
+
+	public static double[] findIntersection(double x1, double y1, 
+											double x2, double y2,
+											double x3, double y3, 
+											double x4, double y4) 
+	{
+		double den = (y4 - y3)*(x2 - x1) - (x4 - x3)*(y2 - y1);
+		if (den != 0) {
+			double ua = ((x4 - x3)*(y1 - y3) - (y4 - y3)*(x1 - x3)) / den;
+			double ub = ((x2 - x1)*(y1 - y3) - (y2 - y1)*(x1 - x3)) / den;
+			if (ua >= 0 && ua <= 1 && ub >= 0 && ub <= 1) {
+				double intersection[] = new double[2];
+				intersection[0] = x1 + ua*(x2 - x1); 
+				intersection[1] = y1 + ua*(y2 - y1); 
+				return intersection;
+			}
+		}
+		return null;
+	}
+
+	public static double[] coordinate(double x, double y, double direction, double distance) {
+		double coordinate[] = new double[2];
+		double xoffset = distance * Math.cos(direction);
+		double yoffset = distance * Math.sin(direction);
+		coordinate[0] = x + xoffset;
+		coordinate[1] = y + yoffset;
+		return coordinate;
+	}
+
+	public static double normalizeAngle180(double angle) {
+		double theta = angle % 360;
+		if (theta < 0) theta += 360;
+		if (theta > 180) theta = 360 - theta;
+		return theta;
+	}
+	
+}
